@@ -1,9 +1,9 @@
 {
-  "name": "herrmanns-reisen-bot",
+  "name": "herrmanns-in-birmingham-bot",
   "version": "1.0.0",
-  "description": "Bot for https://herrmanns.reisen",
+  "description": "Bot for https://herrmanns.in/birmingham",
   "main": "index.js",
-  "repository": "https://github.com/herrmanns-reisen/herrmanns-reisen-bot",
+  "repository": "https://github.com/herrmanns-in/herrmanns-in-birmingham-bot",
   "author": "David Herrmann <davherrmann@googlemail.com>",
   "license": "MIT",
   "dependencies": {

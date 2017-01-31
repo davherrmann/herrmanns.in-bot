@@ -1,0 +1,11 @@
+{
+  "lambda": {
+    "role": "herrmanns-reisen-bot-executor",
+    "name": "herrmanns-reisen-bot",
+    "region": "eu-central-1"
+  },
+  "api": {
+    "id": "287ufrpwk4",
+    "module": "index"
+  }
+}
