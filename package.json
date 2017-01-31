@@ -1,0 +1,12 @@
+{
+  "name": "herrmanns-reisen-bot",
+  "version": "1.0.0",
+  "description": "Bot for https://herrmanns.reisen",
+  "main": "index.js",
+  "repository": "https://github.com/herrmanns-reisen/herrmanns-reisen-bot",
+  "author": "David Herrmann <davherrmann@googlemail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "claudia-bot-builder": "^2.12.0"
+  }
+}
