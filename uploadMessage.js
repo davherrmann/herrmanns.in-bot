@@ -13,7 +13,7 @@ const gist = content => ({
 const createGist = () => fetch('https://api.github.com/gists', {
   method: 'POST',
   headers: {
-    'Authorization': 'token 957be71cfed272b45a45f57ca71f7c89055760a9'
+    'Authorization': 'token INSERT_HERE'
   },
   body: JSON.stringify(gist('creation'))
 })
