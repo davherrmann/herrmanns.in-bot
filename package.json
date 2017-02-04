@@ -7,9 +7,9 @@
   "author": "David Herrmann <davherrmann@googlemail.com>",
   "license": "MIT",
   "scripts": {
-    "update": "claudia update --profile claudia"
+    "update": "wt update herrmanns-in-bot index.js --bundle"
   },
   "dependencies": {
-    "claudia-bot-builder": "^2.12.0"
+    "node-fetch": "^1.6.3"
   }
 }

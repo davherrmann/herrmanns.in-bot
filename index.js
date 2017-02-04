@@ -1,8 +1,41 @@
-const botBuilder = require('claudia-bot-builder')
+const request = require('request')
+const updateGist = require('./uploadMessage.js')
+const triggerTravis = require('./triggerTravis.js')
 
-module.exports = botBuilder((request, originalRequest) => {
-  console.log(JSON.stringify(request, null, 2))
-  console.log(JSON.stringify(originalRequest, null, 2))
+const baseUrl = token => `https://api.telegram.org/bot${token}/`
 
-  return `Hello from space explorer bot! Your request was: ${request.text}`
-}, { platforms: ['telegram'] })
+const sendMessage = ({token, chatId, message}) => {
+  request.post(
+    baseUrl(token) + 'sendMessage',
+    {
+      form: {
+        'chat_id': chatId,
+        'text': message
+      }
+    }
+  )
+}
+
+const uploadMessage = ({message, options}) => {
+  updateGist(options, {
+    fileName: `message-${Date.now()}.json`,
+    content: message
+  })
+}
+
+module.exports = (context, cb) => {
+  uploadMessage({
+    message: context.data.message,
+    options: {
+      gistId: context.data.GIST_ID,
+      token: context.data.GITHUB_TOKEN
+    }
+  })
+  triggerTravis({
+    token: context.data.TRAVIS_TOKEN,
+    repositoryOwner: context.data.REPOSITORY_OWNER,
+    repository: context.data.REPOSITORY
+  })
+
+  return cb(null, {status: 'ok'})
+}
