@@ -1,0 +1,12 @@
+dist: trusty
+language: node_js
+node_js:
+  - "node"
+
+cache: yarn
+
+before_install:
+  - yarn global add wt-cli
+
+script:
+  - wt update herrmanns-in-bot index.js --bundle --token ${WEBTASKS_TOKEN}
