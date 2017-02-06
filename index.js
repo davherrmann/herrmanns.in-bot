@@ -42,14 +42,17 @@ module.exports = (context, req, res) => {
   redirectToSubscriptionDone(res)
 
   if (context.data.subscribe !== undefined) {
+    const token = createToken()
+
     updateGist({
       gistId: context.data.SUBSCRIBERS_GIST_ID,
       token: context.data.GITHUB_TOKEN
     }, {
-      fileName: `subscriber-${createToken()}.json`,
+      fileName: `subscriber-${token}.json`,
       content: {
         name: context.data.name,
-        email: context.data.email
+        email: context.data.email,
+        token
       }
     })
 
