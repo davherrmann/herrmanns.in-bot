@@ -23,9 +23,23 @@ const uploadMessage = ({message, options}) => {
   })
 }
 
-const statusOk = cb => cb(null, {status: 'ok'})
+const statusOk = res => {
+  res.writeHead(200)
+  res.end()
+}
 
-module.exports = (context, cb) => {
+const redirectToSubscriptionDone = res => {
+  res.writeHead(302, {
+    'Location': 'https://herrmanns.in/birmingham/sagen/danke'
+  })
+  res.end()
+}
+
+module.exports = (context, req, res) => {
+  if (context.data.subscribe !== undefined) {
+    redirectToSubscriptionDone(res)
+  }
+
   if (context.data.trigger !== undefined) {
     triggerTravis({
       token: context.data.TRAVIS_TOKEN,
@@ -33,21 +47,24 @@ module.exports = (context, cb) => {
       repository: context.data.REPOSITORY
     })
 
-    return statusOk(cb)
+    return statusOk(res)
   }
 
-  uploadMessage({
-    message: context.data.message,
-    options: {
-      gistId: context.data.GIST_ID,
-      token: context.data.GITHUB_TOKEN
-    }
-  })
-  triggerTravis({
-    token: context.data.TRAVIS_TOKEN,
-    repositoryOwner: context.data.REPOSITORY_OWNER,
-    repository: context.data.REPOSITORY
-  })
+  if (context.data.message !== undefined) {
+    uploadMessage({
+      message: context.data.message,
+      options: {
+        gistId: context.data.GIST_ID,
+        token: context.data.GITHUB_TOKEN
+      }
+    })
+    triggerTravis({
+      token: context.data.TRAVIS_TOKEN,
+      repositoryOwner: context.data.REPOSITORY_OWNER,
+      repository: context.data.REPOSITORY
+    })
+    return statusOk(res)
+  }
 
-  return statusOk(cb)
+  return statusOk(res)
 }
