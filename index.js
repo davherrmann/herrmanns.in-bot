@@ -12,7 +12,14 @@ const sendMessage = ({token, chatId, message}) => {
     {
       form: {
         'chat_id': chatId,
-        'text': message
+        'text': message,
+        'parse_mode': 'markdown',
+        'reply_markup': JSON.stringify({
+          'inline_keyboard': [[{
+            text: 'Bestätigen',
+            callback_data: 'possibleToken'
+          }]]
+        })
       }
     }
   )
@@ -58,10 +65,32 @@ const addToMailingList = ({context, user: {address, name, token}}) => {
   })
 }
 
+const registerTelegram = ({token, url}) => {
+  request.post(
+    baseUrl(token) + 'sendMessage',
+    {
+      form: {
+        'url': url
+      }
+    }
+  )
+}
+
 module.exports = (context, req, res) => {
-  redirectToSubscriptionDone(res)
+  console.log(context)
+
+  if (context.data.registerTelegram !== undefined) {
+    registerTelegram({
+      token: context.data.TELEGRAM_TOKEN,
+      url: 'https://' + context.headers.host
+    })
+
+    return statusOk(res)
+  }
 
   if (context.data.subscribe !== undefined) {
+    redirectToSubscriptionDone(res)
+
     const token = createToken()
 
     updateGist({
@@ -76,13 +105,10 @@ module.exports = (context, req, res) => {
       }
     })
 
-    addToMailingList({
-      context,
-      user: {
-        name: context.data.name,
-        address: context.data.email,
-        token
-      }
+    sendMessage({
+      token: context.data.TELEGRAM_TOKEN,
+      chatId: context.data.TELEGRAM_CHAT_ID,
+      message: `*${context.data.name}* möchte an ${context.data.email} Neuigkeiten von Euch erhalten.`
     })
 
     return
