@@ -23,7 +23,19 @@ const uploadMessage = ({message, options}) => {
   })
 }
 
+const statusOk = cb => cb(null, {status: 'ok'})
+
 module.exports = (context, cb) => {
+  if (context.data.trigger !== undefined) {
+    triggerTravis({
+      token: context.data.TRAVIS_TOKEN,
+      repositoryOwner: context.data.REPOSITORY_OWNER,
+      repository: context.data.REPOSITORY
+    })
+
+    return statusOk(cb)
+  }
+
   uploadMessage({
     message: context.data.message,
     options: {
@@ -37,5 +49,5 @@ module.exports = (context, cb) => {
     repository: context.data.REPOSITORY
   })
 
-  return cb(null, {status: 'ok'})
+  return statusOk(cb)
 }
