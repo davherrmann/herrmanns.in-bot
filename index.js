@@ -48,6 +48,7 @@ const addToMailingList = ({context, user: {address, name, token}}) => {
   const list = mailgun.lists('rundbrief@herrmanns.email')
 
   list.members().create({
+    upsert: 'no',
     subscribed: true,
     address,
     name,
