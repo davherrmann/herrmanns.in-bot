@@ -37,7 +37,7 @@ const redirectToSubscriptionDone = res => {
 
 module.exports = (context, req, res) => {
   if (context.data.subscribe !== undefined) {
-    redirectToSubscriptionDone(res)
+    return redirectToSubscriptionDone(res)
   }
 
   if (context.data.trigger !== undefined) {
