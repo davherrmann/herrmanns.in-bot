@@ -204,7 +204,7 @@ module.exports = (context, req, res) => {
       sendPhoto({
         token: context.data.TELEGRAM_TOKEN,
         chatId: context.data.TELEGRAM_CHANNEL_ID,
-        caption: context.data.message.text,
+        caption: context.data.message.caption,
         photo: context.data.message.photo[3].file_id
       })
     } else {
