@@ -1,6 +1,7 @@
 const request = require('request')
 const updateGist = require('./uploadMessage.js')
 const triggerTravis = require('./triggerTravis.js')
+const crypto = require('crypto')
 
 const baseUrl = token => `https://api.telegram.org/bot${token}/`
 
@@ -35,9 +36,24 @@ const redirectToSubscriptionDone = res => {
   res.end()
 }
 
+const createToken = () => crypto.randomBytes(16).toString('hex')
+
 module.exports = (context, req, res) => {
+  redirectToSubscriptionDone(res)
+
   if (context.data.subscribe !== undefined) {
-    return redirectToSubscriptionDone(res)
+    updateGist({
+      gistId: context.data.SUBSCRIBERS_GIST_ID,
+      token: context.data.GITHUB_TOKEN
+    }, {
+      fileName: `subscriber-${createToken()}.json`,
+      content: {
+        name: context.data.name,
+        email: context.data.email
+      }
+    })
+
+    return
   }
 
   if (context.data.trigger !== undefined) {
