@@ -1,12 +1,12 @@
 const request = require('request')
-const updateGist = require('./uploadMessage.js')
+const {getGist, updateGist} = require('./uploadMessage.js')
 const triggerTravis = require('./triggerTravis.js')
 const crypto = require('crypto')
 const createMailgun = require('mailgun-js')
 
 const baseUrl = token => `https://api.telegram.org/bot${token}/`
 
-const sendMessage = ({token, chatId, message}) => {
+const sendMessage = ({token, chatId, message, data}) => {
   request.post(
     baseUrl(token) + 'sendMessage',
     {
@@ -17,7 +17,7 @@ const sendMessage = ({token, chatId, message}) => {
         'reply_markup': JSON.stringify({
           'inline_keyboard': [[{
             text: 'Bestätigen',
-            callback_data: 'possibleToken'
+            callback_data: data
           }]]
         })
       }
@@ -63,6 +63,8 @@ const addToMailingList = ({context, user: {address, name, token}}) => {
       token
     }
   })
+
+  console.log(`added ${address} to mailing list`)
 }
 
 const registerTelegram = ({token, url}) => {
@@ -77,7 +79,31 @@ const registerTelegram = ({token, url}) => {
 }
 
 module.exports = (context, req, res) => {
-  console.log(context)
+  console.log(JSON.stringify(context.data, null, 2))
+
+  if (context.data.callback_query !== undefined) {
+    const action = context.data.callback_query.data
+
+    if (action.startsWith('subscribe:')) {
+      const token = action.replace('subscribe:', '')
+
+      getGist({
+        gistId: context.data.SUBSCRIBERS_GIST_ID,
+        token: context.data.GITHUB_TOKEN
+      })
+      .then(res => res.json())
+      .then(res => res.files[`subscriber-${token}.json`].content)
+      .then(content => JSON.parse(content))
+      .then(content => addToMailingList({
+        context,
+        user: {
+          address: content.email,
+          name: content.name,
+          token: content.token
+        }
+      }))
+    }
+  }
 
   if (context.data.registerTelegram !== undefined) {
     registerTelegram({
@@ -108,7 +134,8 @@ module.exports = (context, req, res) => {
     sendMessage({
       token: context.data.TELEGRAM_TOKEN,
       chatId: context.data.TELEGRAM_CHAT_ID,
-      message: `*${context.data.name}* möchte an ${context.data.email} Neuigkeiten von Euch erhalten.`
+      message: `*${context.data.name}* möchte an ${context.data.email} Neuigkeiten von Euch erhalten.`,
+      data: 'subscribe:' + token
     })
 
     return

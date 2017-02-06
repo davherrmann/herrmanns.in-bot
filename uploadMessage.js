@@ -10,6 +10,12 @@ const gist = content => ({
   }
 })
 
+const getGist = (options) => fetch(`https://api.github.com/gists/${options.gistId}`, {
+  headers: {
+    'Authorization': `token ${options.token}`
+  }
+})
+
 const createGist = () => fetch('https://api.github.com/gists', {
   method: 'POST',
   headers: {
@@ -35,4 +41,7 @@ const updateGist = (options, file) => fetch(`https://api.github.com/gists/${opti
 })
 .then(console.log(`successfully uploaded ${file.fileName} to https://gist.github.com/${options.gistId}`))
 
-module.exports = updateGist
+module.exports = {
+  getGist,
+  updateGist
+}
