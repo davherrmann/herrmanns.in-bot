@@ -6,6 +6,21 @@ const createMailgun = require('mailgun-js')
 
 const baseUrl = token => `https://api.telegram.org/bot${token}/`
 
+const removeButton = ({token, chatId, messageId, message}) => {
+  request.post(
+    baseUrl(token) + 'editMessageText',
+    {
+      form: {
+        'chat_id': chatId,
+        'message_id': messageId,
+        'text': message,
+        'parse_mode': 'markdown',
+        'reply_markup': '{}'
+      }
+    }
+  )
+}
+
 const sendMessage = ({token, chatId, message, data}) => {
   request.post(
     baseUrl(token) + 'sendMessage',
@@ -94,14 +109,22 @@ module.exports = (context, req, res) => {
       .then(res => res.json())
       .then(res => res.files[`subscriber-${token}.json`].content)
       .then(content => JSON.parse(content))
-      .then(content => addToMailingList({
-        context,
-        user: {
-          address: content.email,
-          name: content.name,
-          token: content.token
-        }
-      }))
+      .then(content => {
+        addToMailingList({
+          context,
+          user: {
+            address: content.email,
+            name: content.name,
+            token: content.token
+          }
+        })
+        removeButton({
+          token: context.data.TELEGRAM_TOKEN,
+          chatId: context.data.TELEGRAM_CHAT_ID,
+          messageId: '' + context.data.callback_query.message.message_id,
+          message: `*${content.name}* erhält Neuigkeiten von Euch an ${content.email}.`
+        })
+      })
     }
   }
 
