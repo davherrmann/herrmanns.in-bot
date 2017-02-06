@@ -40,6 +40,31 @@ const sendMessage = ({token, chatId, message, data}) => {
   )
 }
 
+const sendSimpleMessage = ({token, chatId, message}) => {
+  request.post(
+    baseUrl(token) + 'sendMessage',
+    {
+      form: {
+        'chat_id': chatId,
+        'text': message
+      }
+    }
+  )
+}
+
+const sendPhoto = ({token, chatId, caption, photo}) => {
+  request.post(
+    baseUrl(token) + 'sendPhoto',
+    {
+      form: {
+        'chat_id': chatId,
+        'caption': caption,
+        'photo': photo
+      }
+    }
+  )
+}
+
 const uploadMessage = ({message, options}) => {
   updateGist(options, {
     fileName: `message-${Date.now()}.json`,
@@ -175,6 +200,20 @@ module.exports = (context, req, res) => {
   }
 
   if (context.data.message !== undefined) {
+    if (context.data.message.photo !== undefined) {
+      sendPhoto({
+        token: context.data.TELEGRAM_TOKEN,
+        chatId: context.data.TELEGRAM_CHANNEL_ID,
+        caption: context.data.message.text,
+        photo: context.data.message.photo[3].file_id
+      })
+    } else {
+      sendSimpleMessage({
+        token: context.data.TELEGRAM_TOKEN,
+        chatId: context.data.TELEGRAM_CHANNEL_ID,
+        message: context.data.message.text
+      })
+    }
     uploadMessage({
       message: context.data.message,
       options: {
