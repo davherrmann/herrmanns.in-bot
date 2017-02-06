@@ -2,6 +2,7 @@ const request = require('request')
 const updateGist = require('./uploadMessage.js')
 const triggerTravis = require('./triggerTravis.js')
 const crypto = require('crypto')
+const createMailgun = require('mailgun-js')
 
 const baseUrl = token => `https://api.telegram.org/bot${token}/`
 
@@ -38,6 +39,24 @@ const redirectToSubscriptionDone = res => {
 
 const createToken = () => crypto.randomBytes(16).toString('hex')
 
+const addToMailingList = ({context, user: {address, name, token}}) => {
+  const mailgun = createMailgun({
+    apiKey: context.data.MAILGUN_TOKEN,
+    domain: 'herrmanns.email'
+  })
+
+  const list = mailgun.lists('rundbrief@herrmanns.email')
+
+  list.members().create({
+    subscribed: true,
+    address,
+    name,
+    vars: {
+      token
+    }
+  })
+}
+
 module.exports = (context, req, res) => {
   redirectToSubscriptionDone(res)
 
@@ -52,6 +71,15 @@ module.exports = (context, req, res) => {
       content: {
         name: context.data.name,
         email: context.data.email,
+        token
+      }
+    })
+
+    addToMailingList({
+      context,
+      user: {
+        name: context.data.name,
+        address: context.data.email,
         token
       }
     })

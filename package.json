@@ -10,6 +10,7 @@
     "update": "wt update herrmanns-in-bot index.js --bundle"
   },
   "dependencies": {
+    "mailgun-js": "^0.8.1",
     "node-fetch": "^1.6.3"
   }
 }
