@@ -195,7 +195,7 @@ module.exports = (context, req, res) => {
           token: context.data.TELEGRAM_TOKEN,
           chatId: context.data.TELEGRAM_CHAT_ID,
           messageId: '' + context.data.callback_query.message.message_id,
-          message: `*${content.name}* erhält Neuigkeiten von Euch an ${content.email}.`
+          message: `*${content.name}* erhält Neuigkeiten von Euch an ${content.email}`
         })
 
         statusOk(res)
