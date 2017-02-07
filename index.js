@@ -118,17 +118,21 @@ const sendWelcomeMail = ({context, user: {address, name, token}}) => {
     to: `${name} <${address}>`,
     subject: 'Herzlich willkommen!',
     text: `
-      Hallo ${name},
+Hallo ${name},
 
-      dieser Link führt Dich zu unseren Neuigkeiten und ist nur für Dich bestimmt:
-      https://herrmanns.in/birmingham/${token}
-      Wenn Du anderen von unseren Neuigkeiten erzählen möchtest, gib doch bitte folgenden Link
-      weiter: https://herrmanns.in/birmingham/
-      Achja, tritt am besten auch unserem Telegram-Channel bei: https://t.me/joinchat/AAAAAECNK1RRX_UZuZMH8A
+dieser Link führt Dich zu unseren Neuigkeiten und ist nur für Dich bestimmt:
 
-      Liebe Grüße von
+https://herrmanns.in/birmingham/${token}
 
-      David & Sabine mit Johanna
+Gerade sind wir noch am Einrichten Deines Links, bemühen uns aber, ihn so schnell wie möglich für Dich fertigzustellen.
+
+Wenn Du anderen von unseren Neuigkeiten erzählen möchtest, gib doch bitte folgenden Link weiter: https://herrmanns.in/birmingham/.
+
+Wenn Du möchtest, kannst Du gerne auch unserem Telegram-Channel beitreten: https://t.me/joinchat/AAAAAECNK1RRX_UZuZMH8A
+
+Liebe Grüße von
+
+David & Sabine mit Johanna
     `
   }
 
