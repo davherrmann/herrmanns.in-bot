@@ -199,6 +199,8 @@ module.exports = (context, req, res) => {
           messageId: '' + context.data.callback_query.message.message_id,
           message: `*${content.name}* erhält Neuigkeiten von Euch an ${content.email}.`
         })
+
+        statusOk(res)
       })
     }
   }
