@@ -114,7 +114,7 @@ const sendWelcomeMail = ({context, user: {address, name, token}}) => {
   })
 
   var data = {
-    from: 'Herrmanns sagen hallo <hallo@herrmanns.email>',
+    from: 'Herrmanns sagen Hallo <hallo@herrmanns.email>',
     to: `${name} <${address}>`,
     subject: 'Herzlich willkommen!',
     text: `
