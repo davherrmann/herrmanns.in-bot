@@ -120,15 +120,13 @@ const sendWelcomeMail = ({context, user: {address, name, token}}) => {
     text: `
 Hallo ${name},
 
-dieser Link führt Dich zu unseren Neuigkeiten und ist nur für Dich bestimmt:
+danke für Deine nette Nachricht – gerne lassen wir von uns hören!
 
-https://herrmanns.in/birmingham/${token}
+Im Augenblick richten wir einen persönlichen Link für Dich ein, der in ungefähr 10 Minuten erreichbar ist: https://herrmanns.in/birmingham/${token}
 
-Gerade sind wir noch am Einrichten Deines Links, bemühen uns aber, ihn so schnell wie möglich für Dich fertigzustellen.
+Wenn Du anderen von unseren Neuigkeiten erzählen möchtest, gib doch bitte folgenden Link weiter: https://herrmanns.in/birmingham/
 
-Wenn Du anderen von unseren Neuigkeiten erzählen möchtest, gib doch bitte folgenden Link weiter: https://herrmanns.in/birmingham/.
-
-Wenn Du möchtest, kannst Du gerne auch unserem Telegram-Channel beitreten: https://t.me/joinchat/AAAAAECNK1RRX_UZuZMH8A
+Die Neuigkeiten findest Du übrigens auch in unserem Telegram-Channel: https://t.me/joinchat/AAAAAECNK1RRX_UZuZMH8A
 
 Liebe Grüße von
 
