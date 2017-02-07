@@ -180,6 +180,11 @@ module.exports = (context, req, res) => {
             token: content.token
           }
         })
+        triggerTravis({
+          token: context.data.TRAVIS_TOKEN,
+          repositoryOwner: context.data.REPOSITORY_OWNER,
+          repository: context.data.REPOSITORY
+        })
         sendWelcomeMail({
           context,
           user: {
