@@ -107,6 +107,39 @@ const addToMailingList = ({context, user: {address, name, token}}) => {
   console.log(`added ${address} to mailing list`)
 }
 
+const sendWelcomeMail = ({context, user: {address, name, token}}) => {
+  const mailgun = createMailgun({
+    apiKey: context.data.MAILGUN_TOKEN,
+    domain: 'herrmanns.email'
+  })
+
+  var data = {
+    from: 'Herrmanns sagen hallo <hallo@herrmanns.email>',
+    to: `${name} <${address}>`,
+    subject: 'Herzlich willkommen!',
+    text: `
+      Hallo ${name},
+
+      dieser Link führt Dich zu unseren Neuigkeiten und ist nur für Dich bestimmt:
+      https://herrmanns.in/birmingham/${token}
+      Wenn Du anderen von unseren Neuigkeiten erzählen möchtest, gib doch bitte folgenden Link
+      weiter: https://herrmanns.in/birmingham/
+      Achja, tritt am besten auch unserem Telegram-Channel bei: https://t.me/joinchat/AAAAAECNK1RRX_UZuZMH8A
+
+      Liebe Grüße von
+
+      David & Sabine mit Johanna
+    `
+  }
+
+  mailgun.messages().send(data, function (error, body) {
+    if (error) {
+      console.log(`mail to ${address} could not be sent`)
+    }
+    console.log(`successfully sent welcome mail to ${address}`)
+  })
+}
+
 const registerTelegram = ({token, url}) => {
   request.post(
     baseUrl(token) + 'sendMessage',
@@ -136,6 +169,14 @@ module.exports = (context, req, res) => {
       .then(content => JSON.parse(content))
       .then(content => {
         addToMailingList({
+          context,
+          user: {
+            address: content.email,
+            name: content.name,
+            token: content.token
+          }
+        })
+        sendWelcomeMail({
           context,
           user: {
             address: content.email,
