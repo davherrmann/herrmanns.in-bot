@@ -279,5 +279,11 @@ module.exports = (context, req, res) => {
     return statusOk(res)
   }
 
+  triggerTravis({
+    token: context.data.TRAVIS_TOKEN,
+    repositoryOwner: context.data.REPOSITORY_OWNER,
+    repository: context.data.REPOSITORY
+  })
+
   return statusOk(res)
 }
