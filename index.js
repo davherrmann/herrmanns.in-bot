@@ -147,7 +147,7 @@ const registerTelegram = ({token, url}) => {
     baseUrl(token) + 'setWebhook',
     {
       form: {
-        'url': url
+        'url': url + '/herrmanns-in-bot/'
       }
     }
   )
