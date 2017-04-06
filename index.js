@@ -144,7 +144,7 @@ David & Sabine mit Johanna
 
 const registerTelegram = ({token, url}) => {
   request.post(
-    baseUrl(token) + 'sendMessage',
+    baseUrl(token) + 'setWebhook',
     {
       form: {
         'url': url
